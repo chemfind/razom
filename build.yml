@@ -1,0 +1,27 @@
+name: Збірка exe
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Встановити залежності
+        run: python -m pip install pypdf pyinstaller
+
+      - name: Зібрати exe
+        run: python -m PyInstaller --onefile --windowed --name Obiednannya_PDF obiednannya_pdf.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Obiednannya_PDF
+          path: dist/Obiednannya_PDF.exe
